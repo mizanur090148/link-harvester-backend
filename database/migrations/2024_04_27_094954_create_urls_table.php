@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('domain_id');
             $table->table('url')->nullable();
             $table->timestamps();
+
+            $table->foreign('domain_id')
+                ->references('id')
+                ->on('domains')
+                ->onDelete('cascade');
         });
     }
 
