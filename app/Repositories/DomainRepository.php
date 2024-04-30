@@ -20,20 +20,20 @@ class DomainRepository extends BaseRepository implements DomainRepositoryInterfa
 
     public function index($domainType)
     {
-        return $this->getModel()
-            ->with([
-                'company:id,name,address_one',
-                'branch:id,name',
-                'domainDetails',
-                'chartOfAccount:id,title,ac_code',
-                'domainDetails.chartOfAccount:id,title,ac_code',
-                'domainDetails.chartOfAccountCredit:id,title,ac_code',
-                'domainDetails.chartOfAccountContraAndJournal:id,title,ac_code',
-            ])->when($domainType, function ($query, $domainType) {
-                $query->where('domain_type', $domainType);
-            })
-            ->orderByDesc('id')
-            ->paginate();
+        // return $this->getModel()
+        //     ->with([
+        //         'company:id,name,address_one',
+        //         'branch:id,name',
+        //         'domainDetails',
+        //         'chartOfAccount:id,title,ac_code',
+        //         'domainDetails.chartOfAccount:id,title,ac_code',
+        //         'domainDetails.chartOfAccountCredit:id,title,ac_code',
+        //         'domainDetails.chartOfAccountContraAndJournal:id,title,ac_code',
+        //     ])->when($domainType, function ($query, $domainType) {
+        //         $query->where('domain_type', $domainType);
+        //     })
+        //     ->orderByDesc('id')
+        //     ->paginate();
     }
 
     /**
@@ -41,7 +41,7 @@ class DomainRepository extends BaseRepository implements DomainRepositoryInterfa
      * @param array $domainDetails
      * @return mixed
      */
-    public function store(array $domain, array $domainDetails)
+    public function store(array $domain)
     {
         // $domain = $this->store($domain);
         // $domain->domainDetails()->createMany($domainDetails);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\BaseController;
+//use App\Http\Controllers\Api\BaseController;
 // use App\Http\Controllers\Api\ApiCrudHandler;
 // use App\Http\Requests\UserRequest;
 // use App\Models\User;
@@ -28,12 +28,29 @@ class ProcessController extends Controller
         $this->repository = $repository;
     }
 
+    /**
+     * @return JsonResponse|\JsonResponse
+     */
     public function index()
-    {dd(9999);
+    {
         try {
             return responseSuccess($this->repository->index(request('Domain_type')));
         } catch (\Exception $e) {
         	return responseCantProcess($e);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse|JsonResponse4
+     */
+    public function store(Request $request)
+    {
+        try {
+            $result = $this->repository->store($request->validated());
+            return responseCreated($result);
+        } catch (\Exception $e) {
+            return responseCantProcess($e);
         }
     }
 }

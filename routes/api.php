@@ -8,4 +8,5 @@ use App\Http\Controllers\Api\ProcessController;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::post('url', [ProcessController::class, 'index']);
+Route::get('url', [ProcessController::class, 'index']);
+Route::post('url', [ProcessController::class, 'store']);
