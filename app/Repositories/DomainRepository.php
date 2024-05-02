@@ -41,7 +41,7 @@ class DomainRepository extends BaseRepository implements DomainRepositoryInterfa
      * @param array $domainDetails
      * @return mixed
      */
-    public function store(array $domain)
+    public function store(array $data)
     {
         // $domain = $this->store($domain);
         // $domain->domainDetails()->createMany($domainDetails);

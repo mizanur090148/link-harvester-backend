@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 //use App\Http\Controllers\Api\BaseController;
 // use App\Http\Controllers\Api\ApiCrudHandler;
-// use App\Http\Requests\UserRequest;
+use App\Http\Requests\UrlRequest;
+use App\Jobs\ProcessUrlJob;
 // use App\Models\User;
 // use Illuminate\Http\Response;
 // use Validator;
@@ -44,15 +45,40 @@ class UrlController extends Controller
      * @param Request $request
      * @return JsonResponse|JsonResponse4
      */
-    public function store(Request $request)
+    public function store(UrlRequest $request)
     {
-        $data = $request->all(); 
-        dd($data);
+        $inputs = [];
+        $inputArr = $request->urls; 
+        
+        foreach ($inputArr as $url) {
+            // Add 'http://' to URL if no scheme is provided
+            if (!parse_url($url, PHP_URL_SCHEME)) {
+                $url = "http://" . $url;
+            }
+        
+            $parsedUrl = parse_url($url);
+            $path = '';
+            
+            // Extract path from URL
+            if (isset($parsedUrl['host'])) {
+                if (isset($parsedUrl['path'])) {
+                    $startPos = strpos($url, $parsedUrl['host']);
+                    if ($startPos !== false) {
+                        // Remove the hostname and everything before it from the URL
+                        $path = substr($url, $startPos + strlen($parsedUrl['host']));
+                    }
+                }
+                $inputs[] = ['name' => $parsedUrl['host'], 'url' => $path];
+            }
+        }
+
         try {
-            $result = $this->repository->store($request->validated());
-            return responseCreated($result);
+            ProcessUrlJob::dispatch($inputs);
+            //$result = $this->repository->store($inputs);
+            //return responseCreated($result);
         } catch (\Exception $e) {
             return responseCantProcess($e);
         }
     }
+
 }
