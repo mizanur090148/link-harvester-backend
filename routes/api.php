@@ -2,11 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ProcessController;
+use App\Http\Controllers\Api\UrlController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+// Route::get('url', [UrlController::class, 'index']);
+// Route::post('url', [UrlController::class, 'store']);
 
-Route::get('url', [ProcessController::class, 'index']);
-Route::post('url', [ProcessController::class, 'store']);
+
+Route::apiResource('url', UrlController::class)->only(['index', 'store']);

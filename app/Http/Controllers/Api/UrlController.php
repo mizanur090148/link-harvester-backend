@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 // use Validator;
 use App\Repositories\Interfaces\DomainRepositoryInterface;
 
-class ProcessController extends Controller
+class UrlController extends Controller
 {
      /**
      * @var DomainRepositoryInterface
@@ -46,6 +46,8 @@ class ProcessController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->all(); 
+        dd($data);
         try {
             $result = $this->repository->store($request->validated());
             return responseCreated($result);
