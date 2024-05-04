@@ -35,14 +35,15 @@ class DomainRepository implements DomainRepositoryInterface
 
     /**
      * @param array $data
-     * @return mixed
+     * @return true
      */
-    public function store(array $data): mixed
+    public function store(array $data): true
     {
         $domain = $this->model->firstOrCreate(['name' => $data['name']]);
         if ($data['url'] && !$domain->urls()->where('url', $data['url'])->exists()) {
             // If it doesn't exist, create a new URL for the domain
             $domain->urls()->create(['url' => $data['url']]);
         }
+        return true;
     }
 }
