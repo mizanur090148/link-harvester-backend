@@ -3,8 +3,9 @@
 
 namespace App\Repositories\Interfaces;
 
-interface DomainRepositoryInterface extends BaseRepositoryInterface
+interface DomainRepositoryInterface
 {
-    public function index($voucherType);
-    public function store(array $voucher);
+    public function index($orderBy = 'created_at', $order = 'desc');
+    public function search(array $where, $orderBy = 'created_at', $order = 'desc');
+    public function store(array $data);
 }

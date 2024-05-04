@@ -37,37 +37,8 @@ class RepositoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        
-        // $this->app->bind(
-        //     CategoryRepositoryInterface::class,
-        //     CategoryRepository::class
-        // );
-        // $this->app->bind(
-        //     SubCategoryRepositoryInterface::class,
-        //     SubCategoryRepository::class
-        // );
-        // $this->app->bind(
-        //     DepartmentRepositoryInterface::class,
-        //     DepartmentRepository::class
-        // );
-        // $this->app->bind(
-        //     CompanyRepositoryInterface::class,
-        //     CompanyRepository::class
-        // );
-        // $this->app->bind(
-        //     BranchRepositoryInterface::class,
-        //     BranchRepository::class
-        // );
-        // $this->app->bind(
-        //     AccountRepositoryInterface::class,
-        //     AccountRepository::class
-        // );
-        // $this->app->bind(
-        //     ChartOfAccountRepositoryInterface::class,
-        //     ChartOfAccountRepository::class
-        // );
         $this->app->bind(
             DomainRepositoryInterface::class,
             DomainRepository::class

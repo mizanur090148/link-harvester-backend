@@ -6,7 +6,7 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\DomainRepositoryInterface;
 use App\Models\Domain;
 
-class DomainRepository extends BaseRepository implements DomainRepositoryInterface
+class DomainRepository implements DomainRepositoryInterface
 {
 
     /**
@@ -15,36 +15,34 @@ class DomainRepository extends BaseRepository implements DomainRepositoryInterfa
      */
     public function __construct(Domain $model)
     {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
-    public function index($domainType)
+    public function index($orderBy = 'created_at', $order = 'desc')
     {
-        // return $this->getModel()
-        //     ->with([
-        //         'company:id,name,address_one',
-        //         'branch:id,name',
-        //         'domainDetails',
-        //         'chartOfAccount:id,title,ac_code',
-        //         'domainDetails.chartOfAccount:id,title,ac_code',
-        //         'domainDetails.chartOfAccountCredit:id,title,ac_code',
-        //         'domainDetails.chartOfAccountContraAndJournal:id,title,ac_code',
-        //     ])->when($domainType, function ($query, $domainType) {
-        //         $query->where('domain_type', $domainType);
-        //     })
-        //     ->orderByDesc('id')
-        //     ->paginate();
+        $modelQuery = $this->model->orderBy($orderBy, $order);
+        return $modelQuery->paginate();
+    }
+
+    public function search($where, $orderBy = 'created_at', $order = 'desc')
+    {
+        $modelQuery = $this->model->orderBy($orderBy, $order);
+        if (sizeof($where) > 0) {
+            $modelQuery->where($where);
+        }
+        return $modelQuery->paginate();
     }
 
     /**
-     * @param array $domain
-     * @param array $domainDetails
+     * @param array $data
      * @return mixed
      */
-    public function store(array $data)
+    public function store(array $data): mixed
     {
-        // $domain = $this->store($domain);
-        // $domain->domainDetails()->createMany($domainDetails);
-        // return $domain->load('domainDetails');
+        $domain = $this->model->firstOrCreate(['name' => $data['name']]);
+        if ($data['url'] && !$domain->urls()->where('url', $data['url'])->exists()) {
+            // If it doesn't exist, create a new URL for the domain
+            $domain->urls()->create(['url' => $data['url']]);
+        }
     }
 }

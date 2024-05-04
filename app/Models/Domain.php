@@ -10,4 +10,9 @@ class Domain extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function urls(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Url::class);
+    }
 }

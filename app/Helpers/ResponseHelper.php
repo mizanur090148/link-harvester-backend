@@ -1,17 +1,34 @@
 <?php
 
-if (!function_exists('factoryId')) {
-    function factoryId()
+use Illuminate\Http\JsonResponse;
+
+
+if (!function_exists('responseSuccess')) {
+    /**
+     * @param null $data
+     * @param string $message
+     * @return JsonResponse
+     */
+    function responseSuccess($data = null, string $message = "Request processed successfully"): \Illuminate\Http\JsonResponse
     {
-        Auth::user()->factory_id ?? null;
+        $response = [
+            'success' => true,
+            'message' => $message
+        ];
+
+        if ($data || is_array($data)) {
+            $response['data'] = $data;
+        }
+        return response()->json($response, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8']);
     }
 }
+
 if (!function_exists('responseCreated')) {
     /**
      * @param null $data
      * @param null $message
      */
-    function responseCreated($data = null, $message = null)
+    function responseCreated($data = null, $message = null): JsonResponse
     {
         $response = [
             'status' => 201,
@@ -30,7 +47,7 @@ if (!function_exists('responsePatched')) {
      * @param null $data
      * @return JsonResponse
      */
-    function responsePatched($data = null)
+    function responsePatched($data = null): JsonResponse
     {
         $response = [
             'status' => 200,
@@ -45,7 +62,7 @@ if (!function_exists('responsePatched')) {
 }
 
 if (!function_exists('responseDeleted')) {
-    function responseDeleted()
+    function responseDeleted(): JsonResponse
     {
         $response = [
             'status' => 200,
@@ -92,28 +109,12 @@ if (!function_exists('responseUnauthorized')) {
     }
 }
 
-if (!function_exists('responseContactAdmin')) {
-    /**
-     * @param $message
-     * @return JsonResponse
-     */
-    function responseContactAdmin($message): JsonResponse
-    {
-        $response = [
-            'status' => 400,
-            'success' => false,
-            'message' => $message
-        ];
-        return response()->json($response, 400);
-    }
-}
-
 if (!function_exists('responseNotFound')) {
     /**
      * @param string $message
      * @return JsonResponse
      */
-    function responseNotFound($message = 'Not Found!'): JsonResponse
+    function responseNotFound(string $message = 'Not Found!'): JsonResponse
     {
         $response = [
             'status' => 404,
@@ -121,24 +122,5 @@ if (!function_exists('responseNotFound')) {
             'message' => $message
         ];
         return response()->json($response, 404);
-    }
-}
-
-if (!function_exists('responseSuccess')) {
-    /**
-     * @param null $data
-     * @param string $message
-     */
-    function responseSuccess($data = null, $message = "Request processed successfully")
-    {
-        $response = [
-            'success' => true,
-            'message' => $message
-        ];
-
-        if ($data || is_array($data)) {
-            $response['data'] = $data;
-        }
-        return response()->json($response, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8']);
     }
 }
