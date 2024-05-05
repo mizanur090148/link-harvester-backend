@@ -5,7 +5,7 @@ namespace App\Repositories\Interfaces;
 
 interface DomainRepositoryInterface
 {
-    public function index($orderBy = 'created_at', $order = 'desc');
-    public function search(array $where, $orderBy = 'created_at', $order = 'desc');
-    public function store(array $data);
+    public function index(string $orderBy = 'created_at', string $order = 'desc');
+    public function search(array $where, string $orderBy = 'created_at', string $order = 'desc');
+    public function store(array $data): bool;
 }

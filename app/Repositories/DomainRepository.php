@@ -18,13 +18,24 @@ class DomainRepository implements DomainRepositoryInterface
         $this->model = $model;
     }
 
-    public function index($orderBy = 'created_at', $order = 'desc')
+    /**
+     * @param string $orderBy
+     * @param string $order
+     * @return mixed
+     */
+    public function index(string $orderBy = 'created_at', string $order = 'desc'): mixed
     {
         $modelQuery = $this->model->orderBy($orderBy, $order);
         return $modelQuery->paginate();
     }
 
-    public function search($where, $orderBy = 'created_at', $order = 'desc')
+    /**
+     * @param array $where
+     * @param string $orderBy
+     * @param string $order
+     * @return mixed
+     */
+    public function search(array $where, string $orderBy = 'created_at', string $order = 'desc'): mixed
     {
         $modelQuery = $this->model->orderBy($orderBy, $order);
         if (sizeof($where) > 0) {
@@ -35,9 +46,9 @@ class DomainRepository implements DomainRepositoryInterface
 
     /**
      * @param array $data
-     * @return true
+     * @return bool
      */
-    public function store(array $data): true
+    public function store(array $data): bool
     {
         $domain = $this->model->firstOrCreate(['name' => $data['name']]);
         if ($data['url'] && !$domain->urls()->where('url', $data['url'])->exists()) {

@@ -26,6 +26,7 @@ class UrlController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
@@ -60,34 +61,30 @@ class UrlController extends Controller
      */
     public function store(UrlRequest $request): JsonResponse
     {
-        $inputs = [];
-        $inputArr = $request->urls;
+        try {
+            $inputs = [];
+            $inputArr = $request->urls;
 
-        foreach ($inputArr as $url) {
-            // Add 'http://' to URL if no scheme is provided
-            if (!parse_url($url, PHP_URL_SCHEME)) {
-                $url = "http://" . $url;
-            }
+            foreach ($inputArr as $url) {
+                // Add 'http://' to URL if no scheme is provided
+                if (!parse_url($url, PHP_URL_SCHEME)) {
+                    $url = "http://" . $url;
+                }
 
-            $parsedUrl = parse_url($url);
-            $path = '';
-            // Extract path from URL
-            if (isset($parsedUrl['host'])) {
-                //if (isset($parsedUrl['path'])) {
+                $parsedUrl = parse_url($url);
+                $path = '';
+                // Extract path from URL
+                if (isset($parsedUrl['host'])) {
                     $startPos = strpos($url, $parsedUrl['host']);
                     if ($startPos !== false) {
                         // Remove the hostname and everything before it from the URL
                         $path = substr($url, $startPos + strlen($parsedUrl['host']));
                     }
-                //}
-                $inputs[] = ['name' => $parsedUrl['host'], 'url' => $path];
+                    $inputs[] = ['name' => $parsedUrl['host'], 'url' => $path];
+                }
             }
-        }
-
-        try {
-            $chunks = array_chunk($inputs, 1);
+            $chunks = array_chunk($inputs, 100);
             foreach ($chunks as $chunk) {
-                //$this->repository->store(['name' => 'www.fb.com', 'url' => '/home']);
                ProcessUrlJob::dispatch($chunk, $this->repository)->onConnection('database');
             }
             return responseCreated();

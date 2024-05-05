@@ -42,37 +42,6 @@ if (!function_exists('responseCreated')) {
     }
 }
 
-if (!function_exists('responsePatched')) {
-    /**
-     * @param null $data
-     * @return JsonResponse
-     */
-    function responsePatched($data = null): JsonResponse
-    {
-        $response = [
-            'status' => 200,
-            'success' => true,
-            'message' => 'Record updated successfully'
-        ];
-        if ($data) {
-            $response['data'] = $data;
-        }
-        return response()->json($response);
-    }
-}
-
-if (!function_exists('responseDeleted')) {
-    function responseDeleted(): JsonResponse
-    {
-        $response = [
-            'status' => 200,
-            'success' => true,
-            'message' => 'Record deleted successfully'
-        ];
-        return response()->json($response);
-    }
-}
-
 if (!function_exists('responseCantProcess')) {
     /**
      * @param Throwable|null $t
@@ -89,23 +58,6 @@ if (!function_exists('responseCantProcess')) {
                     : 'Cannot process request')
         ];
         return response()->json($response, 400);
-    }
-}
-
-if (!function_exists('responseUnauthorized')) {
-    /**
-     * @param string $message
-     * @param int $status
-     * @return JsonResponse
-     */
-    function responseUnauthorized(string $message = 'Unauthorized', int $status = 401): JsonResponse
-    {
-        $response = [
-            'status' => $status,
-            'success' => false,
-            'message' => $message
-        ];
-        return response()->json($response, $status);
     }
 }
 
